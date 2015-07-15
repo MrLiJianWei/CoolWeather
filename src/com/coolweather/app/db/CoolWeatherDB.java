@@ -32,7 +32,8 @@ public class CoolWeatherDB {
 	 * 将构造方法私有化
 	 */
 	private CoolWeatherDB(Context context){
-		CoolWeatherOpenHelper dbHelper = new CoolWeatherOpenHelper(context, DB_NAME, null, VERSION);
+		CoolWeatherOpenHelper dbHelper = new CoolWeatherOpenHelper(
+				context, DB_NAME, null, VERSION);
 		db = dbHelper.getWritableDatabase();
 	}
 	
@@ -40,7 +41,7 @@ public class CoolWeatherDB {
 	 * 获取CoolWeatherDB的实例
 	 */
 	public synchronized static CoolWeatherDB getInstance(Context context){
-		if(coolWeatherDB == null){
+		if(coolWeatherDB == null ){
 			coolWeatherDB = new CoolWeatherDB(context);
 		}
 		
@@ -87,6 +88,8 @@ public class CoolWeatherDB {
 			ContentValues values = new ContentValues();
 			values.put("city_name", city.getCityName());
 			values.put("city_code", city.getCityCode());
+			values.put("province_id", city.getProvinceId());
+			
 			db.insert("City", null, values);
 		}
 	}
@@ -96,7 +99,8 @@ public class CoolWeatherDB {
 	 */
 	public List<City> loadCity(int provinceId){
 		List<City> list = new ArrayList<City>();
-		Cursor cursor = db.query("City", null, "province_id = ?", new String[]{String.valueOf(provinceId)}, null, null, null);
+		Cursor cursor = db.query("City", null, "province_id = ?",
+				new String[]{String.valueOf(provinceId)}, null, null, null);
 		if(cursor.moveToFirst()){
 			do {
 				City city = new City();
@@ -120,6 +124,8 @@ public class CoolWeatherDB {
 			ContentValues values = new ContentValues();
 			values.put("county_name", county.getCountyName());
 			values.put("county_code", county.getCountyCode());
+			values.put("city_id", county.getCityId());
+			
 			db.insert("County", null, values);
 		}
 	}
@@ -129,7 +135,8 @@ public class CoolWeatherDB {
 	 */
 	public List<County> loadCounty(int cityId){
 		List<County> list = new ArrayList<County>();
-		Cursor cursor = db.query("County", null, "city_id = ?", new String[]{String.valueOf(cityId)}, null, null, null);
+		Cursor cursor = db.query("County", null, "city_id = ?",
+				new String[]{String.valueOf(cityId)}, null, null, null);
 		if(cursor.moveToFirst()){
 			do {
 				County county = new County();
